@@ -2,4 +2,17 @@
 
 Realtime drawing game built with SocketIO, Gulp and Node
 
+## To Do:
+
+- [ ] Server
+- [ ] Pug
+- [ ] Static
+- [ ] SocketIO
+
 ### yarn init
+
+### ES Lint
+
+.eslintrc.js 파일을 복사하고
+
+- yarn add eslint-plugin-prettier -D
