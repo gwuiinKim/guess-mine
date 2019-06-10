@@ -2,6 +2,8 @@
 
 Realtime drawing game built with SocketIO, Gulp and Node
 
+### recap 다시 보기
+
 ## To Do:
 
 - [ ] Server
@@ -50,3 +52,7 @@ http 서버 위에다가 ws 서버를 작동시키면.
 서버도 event가 있고 클라이언트도 event가 있다. 둘다 event를 보낼 수 있고 listen할 수 있다.
 서버가 도중에 끊어지더라도 클라이언트 측에서는 여전히 연결하려고 하기 때문에, 나중에 다시 서버가 켜지면 자동적으로 연결이 된다.
 연결된 socket들은 각각의 id가 있다.
+
+서버에서 방금 막 연결된 socket에게 직접적으로 메세지를 보낼 수 있다. ( socket.emit)
+방금 막 연결된 socket을 제외한 socket들에게 메세지를 보내는 것은 socket.broadcast.emit 이다.
+반대로 client에서도 서버에 socket.emit을 통해서 메세지를 보낼 수 있다.

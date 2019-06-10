@@ -20,6 +20,14 @@ const server = app.listen(PORT, handleListening);
 
 const io = socketIO.listen(server);
 
-let sockets = [];
-
-io.on("connection", socket => sockets.push(socket.id));
+io.on("connection", socket => {
+  socket.on("newMessage", ({ message }) => {
+    socket.broadcast.emit("messageNotif", {
+      message,
+      nickname: socket.nickname || "Anon"
+    });
+  });
+  socket.on("setNickname", ({ nickname }) => {
+    socket.nickname = nickname;
+  });
+});
