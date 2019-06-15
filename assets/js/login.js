@@ -1,3 +1,5 @@
+import events from "../../src/event";
+
 const body = document.querySelector("body");
 const loginForm = document.getElementById("jsLogin");
 
@@ -7,18 +9,27 @@ const LOGGED_IN = "loggedIn";
 
 const nickname = localStorage.getItem(NICKNAME);
 
+const logIn = nickname => {
+  // eslint-disable-next-line no-undef
+  window.socket = io("/");
+  window.socket.emit(events.setNickname, { nickname });
+};
+
 if (nickname === null) {
   body.className = LOGGED_OUT;
 } else {
   body.className = LOGGED_IN;
+  logIn(nickname);
 }
 
-const handleFormSubmit = event => {
-  event.preventDefault();
+const handleFormSubmit = e => {
+  e.preventDefault();
   const input = loginForm.querySelector("input");
   const { value } = input;
   input.value = "";
   localStorage.setItem(NICKNAME, value);
+  body.className = LOGGED_IN;
+  logIn(value);
 };
 
 if (loginForm) {
