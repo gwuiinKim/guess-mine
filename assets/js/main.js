@@ -1,3 +1,5 @@
+import { handleMessageNotif } from "./chat";
+console.log("hi");
 // eslint-disable-next-line no-undef
 const socket = io("/");
 
@@ -10,12 +12,6 @@ setTimeout(() => socket.emit("helloGuys"), 4000);
 
 function setNickname(nickname) {
   socket.emit("setNickname", { nickname });
-}
-
-function handleMessageNotif(data) {
-  const { message, nickname } = data;
-  console.log(`${nickname}: ${message}`);
-  return;
 }
 
 socket.on("messageNotif", handleMessageNotif);
