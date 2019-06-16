@@ -1,3 +1,4 @@
-import "./sockets";
+import "./socket";
 import "./login";
-import "./notifications";
+import "./notification";
+import "./chat";
