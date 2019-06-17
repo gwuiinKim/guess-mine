@@ -1,19 +1,22 @@
-import { getSocket } from "./sockets";
+import { getSocket } from "./socket";
 
 const canvas = document.getElementById("jsCanvas");
 const ctx = canvas.getContext("2d");
 const colors = document.getElementsByClassName("jsColor");
 const mode = document.getElementById("jsMode");
 
-const INITIAL_COLOR = "#2c2c2c";
+const INTIAL_STROKE_COLOR = "#2c2c2c";
+
 const CANVAS_SIZE = 700;
 
 canvas.width = CANVAS_SIZE;
 canvas.height = CANVAS_SIZE;
 
+ctx.fillStyle = "white";
 ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-ctx.strokeStyle = INITIAL_COLOR;
-ctx.fillStyle = INITIAL_COLOR;
+ctx.strokeStyle = INTIAL_STROKE_COLOR;
+ctx.fillStyle = INTIAL_STROKE_COLOR;
+
 ctx.lineWidth = 2.5;
 
 let painting = false;
@@ -32,9 +35,14 @@ const beginPath = (x, y) => {
   ctx.moveTo(x, y);
 };
 
-const strokePath = (x, y) => {
+const strokePath = (x, y, color = null) => {
+  let currentColor = ctx.strokeStyle;
+  if (color !== null) {
+    ctx.strokeStyle = color;
+  }
   ctx.lineTo(x, y);
   ctx.stroke();
+  ctx.strokeStyle = currentColor;
 };
 
 const onMouseMove = event => {
@@ -44,8 +52,8 @@ const onMouseMove = event => {
     beginPath(x, y);
     getSocket().emit(events.beginPath, { x, y });
   } else {
-    strokePath(x, y);
-    getSocket().emit(events.strokePath, { x, y });
+    strokePath(x, y, ctx.strokeStyle);
+    getSocket().emit(events.strokePath, { x, y, color: ctx.strokeStyle });
   }
 };
 
@@ -69,9 +77,21 @@ const handleModeClick = () => {
   }
 };
 
+const fill = (color = null) => {
+  let currentColor = ctx.fillStyle;
+  if (color !== null) {
+    ctx.fillStyle = color;
+  }
+  ctx.fillStyle = color;
+  ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+  ctx.fillStyle = currentColor;
+};
+
 const handleCanvasClick = () => {
+  const { events } = window;
   if (filling) {
-    ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+    fill();
+    getSocket().emit(events.fill, { color: ctx.fillStyle });
   }
 };
 
@@ -97,4 +117,5 @@ if (mode) {
 }
 
 export const handleBeganPath = ({ x, y }) => beginPath(x, y);
-export const handleStrokedPath = ({ x, y }) => strokePath(x, y);
+export const handleStrokedPath = ({ x, y, color }) => strokePath(x, y, color);
+export const handleFilled = ({ color }) => fill(color);
