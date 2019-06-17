@@ -12,7 +12,8 @@ const nickname = localStorage.getItem(NICKNAME);
 const logIn = nickname => {
   // eslint-disable-next-line no-undef
   const socket = io("/");
-  socket.emit(window.events.setNickname, { nickname });
+  const { events } = window;
+  socket.emit(events.setNickname, { nickname });
   initSockets(socket);
 };
 
@@ -23,8 +24,8 @@ if (nickname === null) {
   logIn(nickname);
 }
 
-const handleFormSubmit = e => {
-  e.preventDefault();
+const handleFormSubmit = event => {
+  event.preventDefault();
   const input = loginForm.querySelector("input");
   const { value } = input;
   input.value = "";

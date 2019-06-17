@@ -13,17 +13,18 @@ const appendMsg = (text, nickname) => {
   messages.appendChild(li);
 };
 
+export const handleNewMessage = ({ message, nickname }) =>
+  appendMsg(message, nickname);
+
 const handleSendMsg = event => {
   event.preventDefault();
   const input = sendMsg.querySelector("input");
   const { value } = input;
-  getSocket().emit(window.releaseEvents.sendMsg, { message: value });
+  const { events } = window;
+  getSocket().emit(events.sendMsg, { message: value });
   input.value = "";
   appendMsg(value);
 };
-
-export const handleNewMessage = ({ message, nickname }) =>
-  appendMsg(message, nickname);
 
 if (sendMsg) {
   sendMsg.addEventListener("submit", handleSendMsg);
