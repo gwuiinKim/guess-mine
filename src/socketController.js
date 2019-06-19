@@ -12,7 +12,7 @@ const socketController = (socket, io) => {
     socket.nickname = nickname;
     sockets.push({
       id: socket.id,
-      nickname: socket.nickname,
+      nickname: nickname,
       points: 0
     });
     broadcast(events.newUser, { nickname });
